@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RemoveElementTest {
+public class RemoveElement27Test {
     public int removeElement(int[] nums, int val) {
         int k = 0;
 

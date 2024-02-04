@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RemoveDuplicatesTwoTest {
+public class RemoveDuplicatesTwo80Test {
     public static int removeDuplicates(int[] nums) {
         int w = 1;
 

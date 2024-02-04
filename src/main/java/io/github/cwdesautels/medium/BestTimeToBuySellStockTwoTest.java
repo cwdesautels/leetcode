@@ -1,4 +1,4 @@
-package io.github.cwdesautels.easy;
+package io.github.cwdesautels.medium;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
