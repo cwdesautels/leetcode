@@ -5,106 +5,43 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductOfArrayExceptSelf238Test {
-    private static class NumMatrix {
-        private final int[][] prefixes;
+    public int[] productExceptSelf(int[] nums) {
+        final int[] products = new int[nums.length];
 
-        public NumMatrix(int[][] matrix) {
-            prefixes = new int[matrix.length][];
-
-            for (int row = 0; row < matrix.length; row++) {
-                prefixes[row] = new int[matrix[row].length];
-
-                for (int col = 0; col < matrix[row].length; col++) {
-                    if (row < 1) {
-                        if (col < 1) {
-                            prefixes[0][0] = matrix[0][0];
-                        } else {
-                            prefixes[0][col] = matrix[0][col]
-                                    // add column prefix
-                                    + prefixes[0][col - 1];
-                        }
-                    } else {
-                        if (col < 1) {
-                            prefixes[row][0] = matrix[row][0]
-                                    // add row prefix
-                                    + prefixes[row - 1][0];
-                        } else {
-                            prefixes[row][col] = matrix[row][col]
-                                    // add column prefix
-                                    + prefixes[row][col - 1]
-                                    // add row prefix
-                                    + prefixes[row - 1][col]
-                                    // remove double counted section
-                                    - prefixes[row - 1][col - 1];
-                        }
-                    }
-                }
-            }
+        for (int i = 0, swp = 1; i < nums.length; i++) {
+            // As the result array is 0 we need to not clobber values
+            products[i] = swp * (products[i] == 0 // Deal with zero initialized array
+                    ? 1
+                    : products[i]);
+            // Progress prefix product after assignment above to produce a single element offset
+            swp = swp * nums[i];
         }
 
-        public int sumRegion(int tlr, int tlc, int brr, int brc) {
-            if (tlr < 1) {
-                if (tlc < 1) {
-                    return prefixes[brr][brc];
-                } else {
-                    return prefixes[brr][brc]
-                            // remove col prefix
-                            - prefixes[brr][tlc - 1];
-                }
-            } else {
-                if (tlc < 1) {
-                    return prefixes[brr][brc]
-                            // remove row prefix
-                            - prefixes[tlr - 1][brc];
-                } else {
-                    return prefixes[brr][brc]
-                            // remove row prefix
-                            - prefixes[tlr - 1][brc]
-                            // remove col prefix
-                            - prefixes[brr][tlc - 1]
-                            // add double counted section
-                            + prefixes[tlr - 1][tlc - 1];
-                }
-            }
+        for (int i = nums.length - 1, swp = 1; i > -1; i--) {
+            // The swap contains the suffix product when combined with the offset prefix product creates the resulting element
+            products[i] = swp * products[i];
+            // Progress the suffix product
+            swp = swp * nums[i];
         }
+
+        return products;
     }
 
     @Test
     void test1() {
-        final var numMatrix = new NumMatrix(new int[][]{
-                new int[]{3, 0, 1, 4, 2},
-                new int[]{5, 6, 3, 2, 1},
-                new int[]{1, 2, 0, 1, 5},
-                new int[]{4, 1, 0, 1, 7},
-                new int[]{1, 0, 3, 0, 5}});
+        final var input = new int[]{1, 2, 3, 4};
+        final var expected = new int[]{24, 12, 8, 6};
+        final var actual = productExceptSelf(input);
 
-        assertThat(numMatrix.sumRegion(2, 1, 4, 3)).isEqualTo(8); // return 8 (i.e sum of the red rectangle)
-        assertThat(numMatrix.sumRegion(1, 1, 2, 2)).isEqualTo(11); // return 11 (i.e sum of the green rectangle)
-        assertThat(numMatrix.sumRegion(1, 2, 2, 4)).isEqualTo(12); // return 12 (i.e sum of the blue rectangle)
+        assertThat(actual).containsExactly(expected);
     }
 
     @Test
     void test2() {
-        final var numMatrix = new NumMatrix(new int[][]{
-                new int[]{-4, -5}});
+        final var input = new int[]{-1, 1, 0, -3, 3};
+        final var expected = new int[]{0, 0, 9, 0, 0};
+        final var actual = productExceptSelf(input);
 
-        assertThat(numMatrix.sumRegion(0, 0, 0, 0)).isEqualTo(-4);
-        assertThat(numMatrix.sumRegion(0, 0, 0, 1)).isEqualTo(-9);
-        assertThat(numMatrix.sumRegion(0, 1, 0, 1)).isEqualTo(-5);
-    }
-
-    @Test
-    void test3() {
-        final var numMatrix = new NumMatrix(new int[][]{
-                new int[]{7, 7, 0},
-                new int[]{-4, -7, 7},
-                new int[]{-4, 0, -2},
-                new int[]{-8, -5, 6}});
-
-        assertThat(numMatrix.sumRegion(1, 0, 2, 2)).isEqualTo(-10);
-        assertThat(numMatrix.sumRegion(3, 2, 3, 2)).isEqualTo(6);
-        assertThat(numMatrix.sumRegion(2, 1, 2, 2)).isEqualTo(-2);
-        assertThat(numMatrix.sumRegion(0, 2, 2, 2)).isEqualTo(5);
-        assertThat(numMatrix.sumRegion(3, 2, 3, 2)).isEqualTo(6);
+        assertThat(actual).containsExactly(expected);
     }
 }
