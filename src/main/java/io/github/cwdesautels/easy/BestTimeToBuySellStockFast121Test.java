@@ -8,27 +8,24 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class BestTimeToBuySellStockSlowTest {
+public class BestTimeToBuySellStockFast121Test {
     public int maxProfit(int[] prices) {
-        int global = 0;
+        int low = Integer.MAX_VALUE;
+        int profit = 0;
 
-        for (int i = 0; i < prices.length; i++) {
-            int local = 0;
-
-            for (int j = i + 1; j < prices.length; j++) {
-                final var current = prices[j] - prices[i];
-
-                if (current > local) {
-                    local = current;
-                }
+        for (final int price : prices) {
+            if (price < low) {
+                low = price;
             }
 
-            if (local > global) {
-                global = local;
+            final int potential = price - low;
+
+            if (potential > profit) {
+                profit = potential;
             }
         }
 
-        return global;
+        return profit;
     }
 
     public static Stream<Arguments> cases() {
