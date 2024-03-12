@@ -51,8 +51,6 @@ public class LongestConsecutiveSequence128Test {
                     sequences.remove(ceiling++);
                 }
 
-                sequences.remove(num);
-
                 max = Math.max(ceiling - num, max);
             }
         }
